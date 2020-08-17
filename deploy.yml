@@ -1,0 +1,75 @@
+---
+- hosts: pabxservers
+  #remote_user: ubuntu
+  become: true
+
+  tasks:
+  - name: install asterisk
+    apt:
+      name: asterisk
+      state: present
+  
+  - name: copy extensions.conf
+    copy:  
+      src: conf/extensions.conf
+      dest: /etc/asterisk/extensions.conf
+
+  - name: copy ari.conf
+    copy:  
+      src: conf/ari.conf
+      dest: /etc/asterisk/ari.conf
+
+  - name: copy http.conf
+    copy:  
+      src: conf/http.conf
+      dest: /etc/asterisk/http.conf
+  
+  - name: copy iax.conf
+    copy:  
+      src: conf/iax.conf
+      dest: /etc/asterisk/iax.conf
+
+  - name: install python2
+    apt:
+      name: python-minimal
+      state: present
+  
+  - name: install python2 ari
+    shell: pip2 install ari
+  
+  
+  - name: restart asterisk
+    service:
+      name: asterisk
+      state: restarted
+  
+  - name: copy python app
+    copy:  
+      src: client.py
+      dest: /opt/client.py
+      owner: root
+      group: root
+      mode: '0755'
+  
+  - name: install systemd file
+    copy:  
+      src: allocloud.service
+      dest: /lib/systemd/system/allocloud.service
+  
+  - name: enable newly installed service
+    shell: systemctl daemon-reload
+  
+  - name: start application
+    service:
+      name: allocloud
+      state: started
+
+  
+    
+        
+    
+    
+  
+  
+
+  
