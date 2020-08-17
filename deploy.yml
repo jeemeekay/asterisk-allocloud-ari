@@ -1,5 +1,5 @@
 ---
-- hosts: pabxservers
+- hosts: all
   #remote_user: ubuntu
   become: true
 
@@ -32,6 +32,11 @@
   - name: install python2
     apt:
       name: python-minimal
+      state: present
+  
+  - name: install python2 pip
+    apt:
+      name: python-pip
       state: present
   
   - name: install python2 ari
